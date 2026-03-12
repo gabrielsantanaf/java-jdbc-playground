@@ -1,28 +1,28 @@
 package application;
 
-import application.model.Seller;
-import application.use_cases.Escrita;
-import application.use_cases.Leitura;
+import db.DB;
+import domain.entity.Seller;
+import repositories.Read;
+import repositories.Write;
 
-import java.text.SimpleDateFormat;
 
 public class Program {
     public static void main(String[] args) {
 
 
-        Leitura leitura = new Leitura();
-        leitura.get("select * from department");
+        Read read = new Read(DB.getConnection());
+        read.get("select * from department");
 
-        Escrita escrita = new Escrita();
+        Write write = new Write(DB.getConnection());
         Seller seller = new Seller(
-                "Carl Purple",
-                "carl@gmail.com",
+                "João",
+                "joão@gmail.com",
                 "22/04/1985",
                 3000.0,
                 4
         );
 
-        escrita.insertSeller(seller);
+        write.insertSeller(seller);
 
 
     }

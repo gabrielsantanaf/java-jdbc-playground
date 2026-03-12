@@ -1,25 +1,22 @@
-package application.use_cases;
+package repositories;
 
-import application.model.Seller;
+import domain.entity.Seller;
 import db.DB;
 import db.DbException;
 
 import java.sql.*;
-import java.text.SimpleDateFormat;
 
-public class Escrita {
+public class Write {
+    private final Connection conn;
 
-    public Escrita() {
+    public Write(Connection conn) {
+        this.conn = conn;
     }
 
     public void insertSeller(Seller seller){
-
-        Connection conn = null;
         PreparedStatement st = null;
 
         try {
-            conn = DB.getConnection();
-
             st = conn.prepareStatement(
                     "INSERT INTO seller "
                             + "(Name, Email, BirthDate, BaseSalary, DepartmentId) "

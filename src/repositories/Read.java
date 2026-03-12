@@ -1,4 +1,4 @@
-package application.use_cases;
+package repositories;
 
 import db.DB;
 import db.DbException;
@@ -8,19 +8,18 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Leitura {
-    private String query;
+public class Read {
+    private final Connection conn;
 
-    public Leitura() {
+    public Read(Connection conn) {
+        this.conn = conn;
     }
 
     public void get(String query) {
-        Connection conn = null;
         Statement st = null;
         ResultSet rs = null;
 
         try {
-            conn =  DB.getConnection();
             st = conn.createStatement();
             rs = st.executeQuery(query);
 
@@ -38,4 +37,6 @@ public class Leitura {
             DB.closeConnection();
         }
     }
+
+
 }
