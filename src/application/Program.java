@@ -1,38 +1,29 @@
 package application;
 
-import db.DB;
+import application.model.Seller;
+import application.use_cases.Escrita;
+import application.use_cases.Leitura;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.text.SimpleDateFormat;
 
 public class Program {
     public static void main(String[] args) {
 
-        Connection conn = null;
-        Statement st = null;
-        ResultSet rs = null;
 
-        try {
-          conn =  DB.getConnection();
+        Leitura leitura = new Leitura();
+        leitura.get("select * from department");
 
-          st = conn.createStatement();
+        Escrita escrita = new Escrita();
+        Seller seller = new Seller(
+                "Carl Purple",
+                "carl@gmail.com",
+                "22/04/1985",
+                3000.0,
+                4
+        );
 
-          rs = st.executeQuery("select * from department");
+        escrita.insertSeller(seller);
 
-          while (rs.next()){
-              System.out.println(rs.getInt("Id") + ", " + rs.getString("Name"));
-          }
 
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-        }
-        finally {
-            DB.closeResultSet(rs);
-            DB.closeStatment(st);
-            DB.closeConnection();
-        }
     }
 }

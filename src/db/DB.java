@@ -10,15 +10,16 @@ public class DB {
     private static Connection conn = null;
 
     public static  Connection getConnection(){
-        if (conn == null){
-            try {
+
+        try {
+            if (conn == null || conn.isClosed()) {
                 Properties props = loadProperties();
                 String url = props.getProperty("dburl");
                 conn = DriverManager.getConnection(url, props);
             }
-            catch (SQLException e){
-                throw new DbException(e.getMessage());
-            }
+        }
+        catch (SQLException e){
+            throw new DbException(e.getMessage());
         }
         return conn;
     }
