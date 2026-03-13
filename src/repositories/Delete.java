@@ -19,6 +19,7 @@ public class Delete {
         PreparedStatement st = null;
         try {
             conn = DB.getConnection();
+            conn.setAutoCommit(false);
 
             st = conn.prepareStatement(
                     "DELETE FROM seller "
@@ -28,11 +29,18 @@ public class Delete {
             st.setInt(1, id);
 
             int rowsAffected = st.executeUpdate();
+            conn.commit();
 
             System.out.println("Done! Rows affected: " + rowsAffected);
         }
         catch (SQLException e) {
-            throw new DbIntegrityException(e.getMessage());
+            try {
+                conn.rollback();
+                throw new DbException("Transaction rolled back! Caused by: " + e.getMessage());
+            }
+            catch (SQLException e1){
+                throw new DbException("Error trying to rollback! Caused by: " + e1.getMessage());
+            }
         }
         finally {
             DB.closeStatement(st);

@@ -17,6 +17,8 @@ public class Write {
         PreparedStatement st = null;
 
         try {
+            conn.setAutoCommit(false);
+
             st = conn.prepareStatement(
                     "INSERT INTO seller "
                             + "(Name, Email, BirthDate, BaseSalary, DepartmentId) "
@@ -32,6 +34,7 @@ public class Write {
             st.setInt(5, seller.getDepartmentId());
 
             int rowsAffected = st.executeUpdate();
+            conn.commit();
 
             if (rowsAffected > 0){
                 ResultSet rs = st.getGeneratedKeys();
@@ -46,8 +49,13 @@ public class Write {
             }
         }
         catch (SQLException e){
-            throw new DbException(e.getMessage());
-        }
+            try {
+                conn.rollback();
+                throw new DbException("Transaction rolled back! Caused by: " + e.getMessage());
+            }
+            catch (SQLException e1){
+                throw new DbException("Error trying to rollback! Caused by: " + e1.getMessage());
+            }        }
         finally {
             DB.closeStatement(st);
             DB.closeConnection();

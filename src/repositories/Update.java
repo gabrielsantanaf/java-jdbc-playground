@@ -17,7 +17,7 @@ public class Update {
     public void updateBaseSalary(double baseSalary, int departament){
         PreparedStatement st = null;
         try {
-            conn = DB.getConnection();
+            conn.setAutoCommit(false);
 
             st = conn.prepareStatement(
                     "UPDATE seller "
@@ -29,11 +29,18 @@ public class Update {
             st.setInt(2, departament);
 
             int rowsAffected = st.executeUpdate();
+            conn.commit();
 
             System.out.println("Done! Rows affected: " + rowsAffected);
         }
         catch (SQLException e) {
-            throw new DbException(e.getMessage());
+            try {
+                conn.rollback();
+                throw new DbException("Transaction rolled back! Caused by: " + e.getMessage());
+            }
+            catch (SQLException e1){
+                throw new DbException("Error trying to rollback! Caused by: " + e1.getMessage());
+            }
         }
         finally {
             DB.closeStatement(st);
