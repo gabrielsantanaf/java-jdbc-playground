@@ -2,6 +2,7 @@ package application;
 
 import db.DB;
 import domain.entity.Seller;
+import repositories.Delete;
 import repositories.Read;
 import repositories.Update;
 import repositories.Write;
@@ -25,5 +26,8 @@ public class Program {
 
         Update up = new Update(DB.getConnection());
         up.updateBaseSalary(200.0, 2);
+
+        Delete delete = new Delete(DB.getConnection());
+        delete.deleteSaller(8);
     }
 }
