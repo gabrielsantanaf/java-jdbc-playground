@@ -49,7 +49,7 @@ public class Write {
             throw new DbException(e.getMessage());
         }
         finally {
-            DB.closeStatment(st);
+            DB.closeStatement(st);
             DB.closeConnection();
         }
     }

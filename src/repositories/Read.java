@@ -33,7 +33,7 @@ public class Read {
         }
         finally {
             DB.closeResultSet(rs);
-            DB.closeStatment(st);
+            DB.closeStatement(st);
             DB.closeConnection();
         }
     }
